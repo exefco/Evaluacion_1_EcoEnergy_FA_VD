@@ -1,21 +1,19 @@
 from django.db import models
 
-# Create your models here.
 
 class BaseModel(models.Model):
     STATES = [
-        ("ACTIVO", "Activo"),
-        ("INACTIVO", "Inactivo"),
+        ("ACTIVE", "Active"),
+        ("INACTIVE", "Inactive"),
     ]
 
-    state = models.CharField(max_length=10, choices=STATES, default="ACTIVO")
-    created_at = models.DateTimeField(auto_now_add=True)   # se asigna al crear
-    updated_at = models.DateTimeField(auto_now=True)       # se actualiza cada vez que se guarda
-    deleted_at = models.DateTimeField(null=True, blank=True)  # opcional para borrado lógico
+    state = models.CharField(max_length=10, choices=STATES, default="ACTIVE")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
-        abstract = True   # no crea tabla, solo se hereda
-
+        abstract = True
 class Category(BaseModel):
     name = models.CharField(max_length=100)
 
@@ -51,13 +49,13 @@ class Alert(BaseModel):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Alerta {self.device} - {self.message}"
+        return f"Alert: {self.device} - {self.message}"
 
 class Organization(BaseModel):
     name = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"Nombre de la Empresa : {self.name}"
+        return f"Company name: {self.name}"
 
 
 
