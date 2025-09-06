@@ -16,7 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from dispositivos.views import inicio,device,iniciarSesion,recoverPassword
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("panel/",inicio,name="panel"),
+    path("device/<int:device_id>/",device,name="device"),
+    path("",iniciarSesion,name="iniciarSesion"),
+    path("recoverpassword/",recoverPassword,name="recoverpassword"),
 ]
