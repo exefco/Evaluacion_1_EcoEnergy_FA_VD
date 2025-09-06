@@ -15,6 +15,7 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+
 class Category(BaseModel):
     name = models.CharField(max_length=100)
 
@@ -33,6 +34,12 @@ class Organization(BaseModel):
     def __str__(self):
         return f"Company name: {self.name}"
 
+class Organization(BaseModel):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"Company name: {self.name}"
+
 class Device(BaseModel):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
@@ -40,8 +47,11 @@ class Device(BaseModel):
     max_usage = models.IntegerField()
     organization = models.ForeignKey(Organization,on_delete=models.CASCADE)
 
+    organization = models.ForeignKey(Organization,on_delete=models.CASCADE)
+
 
     def __str__(self):
+        return self.name
         return self.name
 
 class Measurement(BaseModel):
@@ -64,4 +74,12 @@ class Alert(BaseModel):
     level = models.CharField(max_length=10, choices=LEVELS, default="mid")
 
     def __str__(self):
+        return f"Alert: {self.device} - {self.message}"
+
+
+
+
+
+
+
         return f"Alert: ({self.level} - {self.device}: {self.message})"
