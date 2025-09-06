@@ -18,12 +18,33 @@ def inicio(request):
 
     return render(request, 'devices/panel.html',{'devices':devices,'zones':zones,'categories':categories,'measurements':measurements,'alerts':alerts,'empresa':empresa})
 
+def devices_list(request):
+    empresa = request.session.get("empresa")
+    devices = Device.objects.filter(organization__name=empresa)
+    categoria_id = request.GET.get("categoria")
+    if categoria_id:
+        devices = devices.filter(category_id=categoria_id)
+    categories = Category.objects.filter(device__in=devices).distinct()
+    return render(request, 'devices/devices_list.html', {'devices': devices, 'empresa': empresa, 'categories': categories})
+
+def alerts_list(request):
+    empresa = request.session.get("empresa")
+    devices = Device.objects.filter(organization__name=empresa)
+    alerts = Alert.objects.filter(device__in=devices)
+    return render(request, 'devices/alerts_list.html', {'alerts': alerts, 'empresa': empresa})
+
+def measurements_list(request):
+    empresa = request.session.get("empresa")
+    devices = Device.objects.filter(organization__name=empresa)
+    measurements = Measurement.objects.filter(device__in=devices)
+    return render(request, 'devices/measurements_list.html', {'measurements': measurements, 'empresa': empresa})
 def device(request,device_id):
     empresa = request.session.get("empresa")
     device = Device.objects.get(id=device_id)
     measurements = Measurement.objects.filter(device=device)
     alerts = Alert.objects.filter(device=device)
     return render(request,"devices/device.html",{"device":device,'empresa':empresa,"measurements":measurements,"alerts":alerts})
+
 
 def iniciarSesion(request): 
     if request.method == "POST":
@@ -40,7 +61,14 @@ def iniciarSesion(request):
     
     return render(request, "devices/login.html")
 
-from django.shortcuts import render, redirect
+def register(request):
+    if request.method == "POST":
+        empresa = request.POST.get("empresa")
+        correo = request.POST.get("correo")
+        password = request.POST.get("password")
+        mensaje = f"La empresa '{empresa}' fue registrada con el correo {correo}."
+        return render(request, "devices/register_done.html", {"mensaje": mensaje})
+    return render(request, "devices/register.html")
 
 def recoverPassword(request):
     if request.method == "POST":

@@ -13,10 +13,19 @@
 <body>
     <div class="row">
         <div class="col-3 bg-primary text-white  p-3">
-            <h2>{{empresa}}</h2>
+            <h2><a href="{% url 'panel' %}" class="text-white">{{empresa}}</a></h2>
         </div>
-        <div class="col-9 bg-primary text-white text-center p-3">
-            <h2>Panel de Dispositivos</h2>
+        <div class="col-2 bg-primary text-white text-center p-3">
+            <h2><a href="{% url 'alerts_list' %}" class="text-white">Alertas</a></h2>
+        </div>
+        <div class="col-2 bg-primary text-white text-center p-3">
+            <h2><a href="{% url 'devices_list' %}" class="text-white">Dispositivos</a></h2>
+        </div>
+        <div class="col-2 bg-primary text-white text-center p-3">
+            <h2><a href="{% url 'measurements_list' %}" class="text-white">mediciones</a></h2>
+        </div>
+        <div class="col-3 bg-primary text-white text-center p-3">
+            <h2><a href="{% url 'iniciarSesion' %}" class="text-white">Cerrar Sesion</a></h2>
         </div>
     </div>
     <div class="row text-center">
