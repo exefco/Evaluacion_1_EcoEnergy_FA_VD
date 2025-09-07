@@ -30,15 +30,10 @@ class Zone(BaseModel):
 
 class Organization(BaseModel):
     name = models.CharField(max_length=100)
-
+    email = models.CharField(max_length=100)
     def __str__(self):
         return f"Company name: {self.name}"
 
-class Organization(BaseModel):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f"Company name: {self.name}"
 
 class Device(BaseModel):
     name = models.CharField(max_length=100)
@@ -51,7 +46,6 @@ class Device(BaseModel):
 
 
     def __str__(self):
-        return self.name
         return self.name
 
 class Measurement(BaseModel):
@@ -74,12 +68,7 @@ class Alert(BaseModel):
     level = models.CharField(max_length=10, choices=LEVELS, default="mid")
 
     def __str__(self):
-        return f"Alert: {self.device} - {self.message}"
-
-
-
-
-
-
 
         return f"Alert: ({self.level} - {self.device}: {self.message})"
+    
+    

@@ -44,7 +44,7 @@
                 {% for device in devices %}
                 {% if device.organization.name == empresa %}
                 <li style="font-size: 20px; text-decoration: none; text-align: left;">
-                    {{ device.name }}
+                    {{ device.name }} - {{device.category.name}} - {{device.zone.name}}
                     <a href="{% url 'device' device.id %}" style="font-size: 20px">Detalles</a>
                 </li>
                 {% endif %}

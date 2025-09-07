@@ -20,10 +20,10 @@ from dispositivos.views import inicio,device,iniciarSesion,recoverPassword,devic
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("panel/",inicio,name="panel"),
+    path("",inicio,name="panel"),
     path("device/<int:device_id>/",device,name="device"),
-    path("",iniciarSesion,name="iniciarSesion"),
-    path("recoverpassword/",recoverPassword,name="recoverpassword"),
+    path("login/",iniciarSesion,name="iniciarSesion"),
+    path("password-reset/",recoverPassword,name="recoverpassword"),
     path("devices/",devices_list,name="devices_list"),
     path("alerts/",alerts_list,name="alerts_list"),
     path("measurements/",measurements_list,name="measurements_list"),
