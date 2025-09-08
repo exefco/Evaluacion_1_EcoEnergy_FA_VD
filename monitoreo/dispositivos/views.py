@@ -11,12 +11,15 @@ def inicio(request):
     if categoria_id:
         devices = devices.filter(category_id=categoria_id)
     zones = Zone.objects.filter(device__in=devices).annotate(num_devices=Count("device", distinct=True))
-    categories = Category.objects.filter(device__in=devices).distinct()
-    measurements = Measurement.objects.filter(device__in=devices)
+    categories = Category.objects.filter(device__in=devices).distinct().annotate(num_devices=Count("device", distinct=True))
+    measurements = Measurement.objects.filter(device__in=devices)[:10]
     alerts = Alert.objects.filter(device__in=devices)
+    alerts_mid = alerts.filter(level='MID').count()
+    alerts_high = alerts.filter(level='HIGH').count()
+    alerts_critical = alerts.filter(level='CRITICAL').count()
     
 
-    return render(request, 'devices/panel.html',{'devices':devices,'zones':zones,'categories':categories,'measurements':measurements,'alerts':alerts,'empresa':empresa})
+    return render(request, 'devices/panel.html',{'devices':devices,'zones':zones,'categories':categories,'measurements':measurements,'alerts':alerts,'empresa':empresa,'alerts_mid':alerts_mid,'alerts_high':alerts_high,'alerts_critical':alerts_critical})
 
 def devices_list(request):
     empresa = request.session.get("empresa")
@@ -36,23 +39,23 @@ def alerts_list(request):
 def measurements_list(request):
     empresa = request.session.get("empresa")
     devices = Device.objects.filter(organization__name=empresa)
-    measurements = Measurement.objects.filter(device__in=devices)
+    measurements = Measurement.objects.filter(device__in=devices).order_by('-date')
     return render(request, 'devices/measurements_list.html', {'measurements': measurements, 'empresa': empresa})
 def device(request,device_id):
     empresa = request.session.get("empresa")
     device = Device.objects.get(id=device_id)
-    measurements = Measurement.objects.filter(device=device)
+    measurements = Measurement.objects.filter(device=device).order_by('-date')
     alerts = Alert.objects.filter(device=device)
-    return render(request,"devices/device.html",{"device":device,'empresa':empresa,"measurements":measurements,"alerts":alerts})
+    zone = Zone.objects.get(id=device.zone.id)
+    return render(request,"devices/device.html",{"device":device,'empresa':empresa,"measurements":measurements,"alerts":alerts,"zone":zone.name})
 
 
 def iniciarSesion(request): 
     if request.method == "POST":
-        empresa_nombre = request.POST.get("empresa")
-        if not empresa_nombre:
-            return render(request, "devices/login.html", {"error": "Por favor ingrese el nombre de la empresa."})
-        
-        empresa = Organization.objects.filter(name=empresa_nombre).first()
+        email = request.POST.get("email")
+        if not email:
+            return render(request, "devices/login.html", {"error": "Por favor ingrese el email de la empresa."})
+        empresa = Organization.objects.filter(email=email).first()
         if not empresa:
             return render(request, "devices/login.html", {"error": "Empresa no encontrada."})
         
@@ -63,8 +66,8 @@ def iniciarSesion(request):
 
 def register(request):
     if request.method == "POST":
-        empresa = request.POST.get("empresa")
         correo = request.POST.get("correo")
+        empresa = request.POST.get("empresa")
         password = request.POST.get("password")
         mensaje = f"La empresa '{empresa}' fue registrada con el correo {correo}."
         return render(request, "devices/register_done.html", {"mensaje": mensaje})

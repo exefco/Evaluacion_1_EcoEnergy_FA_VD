@@ -30,6 +30,7 @@
     <h1>{{ device.name }}</h1>
     <p><strong>Organización:</strong> {{ device.organization.name }}</p>
     <p><strong>Categoría:</strong> {{ device.category.name }}</p>
+    <p><strong>Zona:</strong> {{device.zone}}</p>
 
     <h2>Mediciones</h2>
     <ul>
@@ -43,7 +44,13 @@
     <h2>Alertas</h2>
     <ul>
         {% for a in alerts %}
-        <li>{{ a.level }} - {{ a.message }}</li>
+        {% if a.level == "HIGH" %}
+                        <li style="font-size:20px; color:rgb(255, 94, 0); font-weight:bold;">{{ a }}</li>
+                        {% elif a.level == "MID" %}
+                        <li style="font-size:20px; color:rgb(221, 255, 0);">{{ a }}</li>
+                        {% else %}
+                        <li style="font-size:20px; color:rgb(255, 0, 0);">{{ a }}</li>
+                        {% endif %}
         {% empty %}
         <li>No hay alertas</li>
         {% endfor %}

@@ -74,13 +74,24 @@
                     <h3>Categoría</h3>
                     <ul>
                         {% for category in categories %}
-                        <li style="font-size: 20px;">{{ category.name }}</li>
+                        <li style="font-size: 20px;">{{ category.name }} →  {{ category.num_devices }}</li>
                         {% endfor %}
                     </ul>
 
                 </div>
                 <div class="col-12">
                     <h3>Alertas Semanales</h3>
+                    <div class="row">
+                        <div class="col-4">
+                            {{ alerts_mid }} Mid
+                        </div>
+                        <div class="col-4">
+                            {{ alerts_high }} High
+                        </div>
+                        <div class="col-4">
+                            {{ alerts_critical }} Critical
+                        </div>
+                    </div>
                     <ul>
                         {% for alert in alerts %}
                         {% if alert.level == "HIGH" %}
@@ -97,11 +108,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="col">
                 <div class="col-12" style="background-color: rgb(124, 124, 124);">
                     <h3>Consumo</h3>
                     {% for measurement in measurements %}
-                    <li style="font-size: 20px;">{{ measurement }}</li>
+                    <li style="font-size: 20px;">{{ measurement }} - {{measurement.date}}</li>
                     {% endfor %}
                 </div>
             </div>

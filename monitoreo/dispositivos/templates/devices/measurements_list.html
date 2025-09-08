@@ -28,7 +28,7 @@
         <h3>Lista de Mediciones</h3>
         <ul>
             {% for measurement in measurements %}
-            <li style="font-size:20px;">{{ measurement.device.name }} - {{ measurement.usage }} - {{measurement.updated_at}}kWh</li>
+            <li style="font-size:20px;">{{ measurement.device.name }} - {{ measurement.usage }} kWh - {{measurement.date}} <a href="{% url 'device' measurement.device.id %}">DETALLES</a></li>
             {% endfor %}
         </ul>
 </body>
